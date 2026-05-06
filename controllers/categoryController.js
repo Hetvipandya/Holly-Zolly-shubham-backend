@@ -4,35 +4,31 @@ const cloudinary = require("../config/cloudinaryConfig");
 // CREATE CATEGORY
 exports.createCategory = async (req, res) => {
   try {
-    const { name } = req.body;
+    let imageUrl = "";
 
-    if (!name || !req.file) {
-      return res.status(400).json({
-        success: false,
-        message: "Name and Image are required",
-      });
+    // ✅ Upload image to Cloudinary
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path);
+      imageUrl = result.secure_url; // 🔥 IMPORTANT
     }
 
-    // ✅ Upload to Cloudinary
-    const result = await cloudinary.uploader.upload(req.file.path);
-
     const category = new Category({
-      name,
-      image: result.secure_url, // ✅ IMPORTANT
+      name: req.body.name,
+      image: imageUrl,
+      status: req.body.status || "active",
     });
 
     await category.save();
 
     res.status(201).json({
       success: true,
-      message: "Category created successfully",
       data: category,
     });
   } catch (error) {
-    console.log("CREATE CATEGORY ERROR:", error);
+    console.error("Create category error:", error);
     res.status(500).json({
       success: false,
-      message: "Server error",
+      message: "Failed to create category",
     });
   }
 };
