@@ -1,18 +1,26 @@
 const Category = require("../models/Category");
+const cloudinary = require("../config/cloudinary");
 
 // CREATE CATEGORY
 exports.createCategory = async (req, res) => {
   try {
-    const { name, image } = req.body;
+    const { name } = req.body;
 
-    if (!name || !image) {
+    if (!name || !req.file) {
       return res.status(400).json({
         success: false,
         message: "Name and Image are required",
       });
     }
 
-    const category = new Category({ name, image });
+    // ✅ Upload to Cloudinary
+    const result = await cloudinary.uploader.upload(req.file.path);
+
+    const category = new Category({
+      name,
+      image: result.secure_url, // ✅ IMPORTANT
+    });
+
     await category.save();
 
     res.status(201).json({
