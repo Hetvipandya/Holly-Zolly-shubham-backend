@@ -22,6 +22,9 @@ app.use(cors({
 // ✅ 🔥 STATIC FOLDER FIX (MAIN CHANGE)
 app.use('/uploads', express.static('uploads'));
 
+// ✅ Cloudinary upload route
+app.use('/api/upload', require('./routes/uploadRoutes'));
+
 // ❌ REMOVE this (not needed)
 // app.use('/assets', express.static(path.join(__dirname, 'HZ')));
 

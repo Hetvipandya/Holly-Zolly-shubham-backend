@@ -15,7 +15,7 @@ const authMiddleware = require('../middleware/auth');
 // Auth
 router.post('/register', register); 
 router.post('/login', login);
-
+ 
 // Profile
 router.get('/profile', authMiddleware, getProfile);
 

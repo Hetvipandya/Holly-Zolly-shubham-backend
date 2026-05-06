@@ -14,7 +14,7 @@ const {
 router.post('/', createOrder);
 
 // Get All Orders 
-router.get('/', getAllOrders);
+router.get('/', getAllOrders); 
 
 // Get Orders by User
 router.get('/user/:userId', getUserOrders);
